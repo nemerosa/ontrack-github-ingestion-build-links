@@ -1,0 +1,34 @@
+name: "ontrack-github-ingestion-build-links"
+description: "GitHub Action used to inject build links in Ontrack."
+inputs:
+  # Misc
+  logging:
+    description: 'If set to true, logs additional information on the console'
+    required: false
+    default: 'false'
+  # Target project
+  owner:
+    description: 'Name of the repository owner to target'
+    required: false
+    default: ''
+  repository:
+    description: 'Name of the repository to target'
+    required: false
+    default: ''
+  # Target build
+  build-name:
+    description: 'Name of the build to target'
+    required: false
+    default: ''
+  build-label:
+    description: 'Release property (label) of the build to target'
+    required: false
+    default: ''
+  # Raw list of build links
+  build-links:
+    description: 'YAML list of links'
+    required: false
+    default: ''
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
