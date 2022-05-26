@@ -44,8 +44,11 @@ async function run() {
         const buildLinksYaml = core.getInput('build-links');
         if (buildLinksYaml) {
             const buildLinks = YAML.parse(buildLinksYaml);
+            if (logging) {
+                core.info(`Build links: ${buildLinks}`)
+            }
             // TODO Calls the GraphQL client
-            await client.graphQL(clientEnvironment, '', {});
+            // await client.graphQL(clientEnvironment, '', {});
         }
 
     } catch (error) {
