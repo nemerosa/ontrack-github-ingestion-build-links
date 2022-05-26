@@ -11,10 +11,6 @@ concurrency: "build-${{ github.ref }}"
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-      issues: write
     steps:
 
       - id: checkout
@@ -29,6 +25,8 @@ jobs:
 
       - id: npm-ci
         run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - id: npm-lint
         run: npm run lint
