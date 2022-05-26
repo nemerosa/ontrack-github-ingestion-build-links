@@ -11,6 +11,10 @@ concurrency: "build-${{ github.ref }}"
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      issues: write
     steps:
 
       - id: checkout
