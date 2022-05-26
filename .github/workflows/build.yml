@@ -31,8 +31,8 @@ jobs:
       - id: npm-lint
         run: npm run lint
 
-      - id: npm-test
-        run: npm run test
+#      - id: npm-test
+#        run: npm run test
 
       - id: npm-prepare
         run: npm run prepare
