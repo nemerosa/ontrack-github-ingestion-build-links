@@ -1,0 +1,8 @@
+general:
+  validationJobPrefix: false
+workflows:
+  filter:
+    includes: build
+runs:
+  enabled: true
+

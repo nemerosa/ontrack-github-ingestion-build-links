@@ -1,0 +1,42 @@
+name: "build"
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency: "build-${{ github.ref }}"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - id: checkout
+        uses: actions/checkout@v3
+
+      - id: setup-node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@nemerosa'
+
+      - id: npm-lint
+        run: npm run lint
+
+      - id: npm-test
+        run: npm run test
+
+      - id: npm-prepare
+        run: npm run prepare
+
+      - id: npm-compare
+        name: compare
+        run: |
+          if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
