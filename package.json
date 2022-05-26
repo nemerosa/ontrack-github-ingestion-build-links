@@ -1,0 +1,24 @@
+{
+  "name": "ontrack-github-ingestion-build-links",
+  "version": "0.1.0",
+  "description": "GitHub Action used to inject build links in Ontrack.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nemerosa/ontrack-github-ingestion-build-links.git"
+  },
+  "keywords": [
+    "ontrack",
+    "github",
+    "ingestion"
+  ],
+  "author": "Damien Coraboeuf",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nemerosa/ontrack-github-ingestion-build-links/issues"
+  },
+  "homepage": "https://github.com/nemerosa/ontrack-github-ingestion-build-links#readme"
+}
