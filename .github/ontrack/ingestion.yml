@@ -5,4 +5,13 @@ workflows:
     includes: build
 runs:
   enabled: true
-
+validations:
+  - name: build-run
+    description: Complete CI build has run
+    image: nemerosa/ontrack-ingestion-assets/validations/build.png
+promotions:
+  - name: BRONZE
+    description: Build OK
+    image: nemerosa/ontrack-ingestion-assets/promotions/bronze.png
+    validations:
+      - build-run
