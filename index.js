@@ -90,7 +90,7 @@ async function run() {
         if (buildLinksYaml) {
             buildLinks = YAML.parse(buildLinksYaml);
         } else if (buildLinksYamlPackageJson) {
-            buildLinks = packageJsonLinks.readFromPackageJson(buildLinksYamlPackageJson)
+            buildLinks = await packageJsonLinks.readFromPackageJson(buildLinksYamlPackageJson)
         }
 
         // Checking the build links
