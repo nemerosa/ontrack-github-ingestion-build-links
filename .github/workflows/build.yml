@@ -54,4 +54,4 @@ jobs:
         with:
           logging: true
           build-links-from-package-json: |-
-            - dependency: @nemerosa/ontrack-github-action-client
+            - dependency: "@nemerosa/ontrack-github-action-client"
