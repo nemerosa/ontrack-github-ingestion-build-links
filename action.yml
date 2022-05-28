@@ -24,6 +24,11 @@ inputs:
     description: 'Release property (label) of the build to target'
     required: false
     default: ''
+  # Replacement mode or appending
+  add-only:
+    description: 'If true, just append the given links to the existing ones.'
+    required: false
+    default: 'false'
   # Raw list of build links
   build-links:
     description: 'YAML list of links'

@@ -17249,6 +17249,43 @@ const YAML = __nccwpck_require__(4083);
 
 const client = __nccwpck_require__(7387);
 
+const buildLinksByRunId = async (clientEnvironment, logging, owner, repository, runId, addOnly, buildLinks) => {
+    const query = `
+        mutation BuildLinksByRunId(
+            $owner: String!,
+            $repository: String!,
+            $runId: Long!,
+            $addOnly: Boolean!,
+            $buildLinks: [GitHubIngestionLink!]!,
+        ) {
+            gitHubIngestionBuildLinksByRunId(input: {
+                owner: $owner,
+                repository: $repository,
+                runId: $runId,
+                addOnly: $addOnly,
+                buildLinks: $buildLinks,
+            }) {
+                errors {
+                    message
+                }
+            }
+        }
+    `;
+    const variables = {
+        owner: owner,
+        repository: repository,
+        runId: runId,
+        addOnly: addOnly,
+        buildLinks: buildLinks,
+    };
+    await client.graphQL(
+        clientEnvironment,
+        query,
+        variables,
+        logging
+    );
+};
+
 async function run() {
     try {
         const logging = core.getBooleanInput('logging');
@@ -17283,14 +17320,25 @@ async function run() {
         }
 
         // Using build links
+        const addOnly = core.getBooleanInput('add-only');
         const buildLinksYaml = core.getInput('build-links');
         if (buildLinksYaml) {
             const buildLinks = YAML.parse(buildLinksYaml);
             if (logging) {
                 core.info(`Build links: ${buildLinks}`)
             }
-            // TODO Calls the GraphQL client
-            // await client.graphQL(clientEnvironment, '', {});
+            // By build label
+            if (buildLabel) {
+                throw 'Build by label not implemented yet.';
+            }
+            // By build name
+            else if (buildName) {
+                throw 'Build by name not implemented yet.';
+            }
+            // By run ID
+            else {
+                await buildLinksByRunId(clientEnvironment, logging, owner, repository, github.context.runId, addOnly, buildLinks)
+            }
         }
 
     } catch (error) {
