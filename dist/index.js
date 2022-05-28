@@ -8779,6 +8779,78 @@ function wrappy (fn, cb) {
 
 /***/ }),
 
+/***/ 8167:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const fs = __nccwpck_require__(7147);
+
+const core = __nccwpck_require__(2186);
+
+const YAML = __nccwpck_require__(4083);
+
+const rxDependency = /([a-z_-]+)$/;
+
+const getProjectFromDependency = (dependency) => {
+    const match = dependency.match(rxDependency);
+    return match[1];
+};
+
+const readFromPackageJson = async (configYaml) => {
+    // Parsing the configuration
+    const config = YAML.parse(configYaml);
+    // Parsing the lock file as JSON
+    const lock = JSON.parse(fs.readFileSync('package-lock.json'));
+    // ... and get the list of dependencies
+    const dependencies = lock.dependencies;
+
+    // Resulting links
+    const links = {};
+
+    // For each link in the configuration
+    config.forEach(link => {
+        const dependency = link.dependency;
+        if (dependency) {
+            // Gets the dependency declaration in the lock file
+            const lockDependency = dependencies[dependency];
+            if (lockDependency) {
+                // Gets the version
+                const version = lockDependency.version;
+                if (version) {
+                    // Project name
+                    let project = link.project;
+                    if (!project) {
+                        project = getProjectFromDependency(dependency);
+                    }
+                    // Build reference
+                    let buildRef = version;
+                    if (link['build-label'] === true) {
+                        buildRef = `#${version}`;
+                    }
+                    // Adding the link
+                    links[project] = buildRef;
+                } else {
+                    core.warning(`No dependency version found for: ${dependency}`);
+                }
+            }
+            // No dependency found, warning and going on
+            else {
+                core.warning(`No dependency found for: ${dependency}`);
+            }
+        }
+    });
+
+    // OK
+    return links;
+};
+
+module.exports = {
+    readFromPackageJson: readFromPackageJson,
+    getProjectFromDependency: getProjectFromDependency
+};
+
+
+/***/ }),
+
 /***/ 2877:
 /***/ ((module) => {
 
@@ -17249,6 +17321,8 @@ const YAML = __nccwpck_require__(4083);
 
 const client = __nccwpck_require__(7387);
 
+const packageJsonLinks = __nccwpck_require__(8167);
+
 const buildLinksByRunId = async (clientEnvironment, logging, owner, repository, runId, addOnly, buildLinks) => {
     const query = `
         mutation BuildLinksByRunId(
@@ -17319,11 +17393,26 @@ async function run() {
             throw Error('"build-name" and "build-label" cannot be both declared.');
         }
 
-        // Using build links
+        // Build links resolution
         const addOnly = core.getBooleanInput('add-only');
         const buildLinksYaml = core.getInput('build-links');
+        const buildLinksYamlPackageJson = core.getInput('build-links-from-package-json');
+
+        // Resolution of the build links
+        let buildLinks = {};
+
         if (buildLinksYaml) {
-            const buildLinks = YAML.parse(buildLinksYaml);
+            buildLinks = YAML.parse(buildLinksYaml);
+        } else if (buildLinksYamlPackageJson) {
+            buildLinks = packageJsonLinks.readFromPackageJson(buildLinksYamlPackageJson)
+        }
+
+        // Checking the build links
+        if (!buildLinks) {
+            core.warning('No build links was specified. Not doing anything.');
+        }
+        // Calling
+        else {
             if (logging) {
                 core.info(`Build links: ${buildLinks}`)
             }

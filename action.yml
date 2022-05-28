@@ -34,6 +34,11 @@ inputs:
     description: 'YAML list of links'
     required: false
     default: ''
+  # Extracting the links from the `package.json` file `dependencies`
+  build-links-from-package-json:
+    description: 'Extracting the links from the `package.json` file `dependencies`'
+    required: false
+    default: ''
 runs:
   using: 'node16'
   main: 'dist/index.js'

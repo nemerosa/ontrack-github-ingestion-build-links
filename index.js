@@ -7,6 +7,8 @@ const YAML = require('yaml');
 
 const client = require('@nemerosa/ontrack-github-action-client');
 
+const packageJsonLinks = require('./package-json-links');
+
 const buildLinksByRunId = async (clientEnvironment, logging, owner, repository, runId, addOnly, buildLinks) => {
     const query = `
         mutation BuildLinksByRunId(
@@ -77,11 +79,26 @@ async function run() {
             throw Error('"build-name" and "build-label" cannot be both declared.');
         }
 
-        // Using build links
+        // Build links resolution
         const addOnly = core.getBooleanInput('add-only');
         const buildLinksYaml = core.getInput('build-links');
+        const buildLinksYamlPackageJson = core.getInput('build-links-from-package-json');
+
+        // Resolution of the build links
+        let buildLinks = {};
+
         if (buildLinksYaml) {
-            const buildLinks = YAML.parse(buildLinksYaml);
+            buildLinks = YAML.parse(buildLinksYaml);
+        } else if (buildLinksYamlPackageJson) {
+            buildLinks = packageJsonLinks.readFromPackageJson(buildLinksYamlPackageJson)
+        }
+
+        // Checking the build links
+        if (!buildLinks) {
+            core.warning('No build links was specified. Not doing anything.');
+        }
+        // Calling
+        else {
             if (logging) {
                 core.info(`Build links: ${buildLinks}`)
             }

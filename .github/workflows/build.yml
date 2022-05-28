@@ -31,8 +31,8 @@ jobs:
       - id: npm-lint
         run: npm run lint
 
-#      - id: npm-test
-#        run: npm run test
+      - name: npm-test
+        run: npm run test
 
       - name: npm-prepare
         run: npm run prepare
@@ -45,3 +45,9 @@ jobs:
             git diff
             exit 1
           fi
+
+      - name: ontrack-build-links
+        uses: ./
+        with:
+          build-links-from-package-json: |-
+            - dependency: @nemerosa/ontrack-github-action-client

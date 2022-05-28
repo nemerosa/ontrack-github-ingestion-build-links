@@ -37,3 +37,53 @@ By default, the build referred to by the action is identified by the same workfl
 ```
 
 Other [input arguments](action.yml) are available.
+
+# Links extraction
+
+## From a NPM/Yarn `package-lock.json` file
+
+A local `package-lock.json` NPM/Yarn JSON file can be used to extract the dependencies:
+
+```yaml
+with:
+  build-links-from-package-json: |-
+    - dependency: "@nemerosa/ontrack-github-action-client"
+```
+
+By default, the Ontrack project name is extracted from the library. In this example, this would give `ontrack-github-action-client` as the project name. It can be overridden using the `project` property. The code below is equivalent to the previous one:
+
+```yaml
+with:
+  build-links-from-package-json: |-
+    - dependency: "@nemerosa/ontrack-github-action-client"
+      project: "ontrack-github-action-client"
+```
+
+The version is read from the `package-lock.json` `dependencies` node. For example, if:
+
+```json
+{
+  "dependencies": {
+    "@nemerosa/ontrack-github-action-client": {
+      "version": "0.1.6",
+      "resolved": "...",
+      "integrity": "...",
+      "requires": {
+        "cross-fetch": "^3.1.5"
+      }
+    }
+  }
+}
+```
+
+then the version is `0.1.6`.
+
+By default, the version is used as the build name. If the build label must be used instead, use the `build-label` property:
+
+```yaml
+with:
+  build-links-from-package-json: |-
+    - dependency: "@nemerosa/ontrack-github-action-client"
+      # ...
+      build-label: true
+```
