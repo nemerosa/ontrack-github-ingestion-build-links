@@ -17345,12 +17345,19 @@ const buildLinksByRunId = async (clientEnvironment, logging, owner, repository, 
             }
         }
     `;
+    const buildLinksInput = [];
+    for (const project in buildLinks) {
+        buildLinksInput.push({
+            project: project,
+            buildRef: buildLinks[project]
+        });
+    }
     const variables = {
         owner: owner,
         repository: repository,
         runId: runId,
         addOnly: addOnly,
-        buildLinks: buildLinks,
+        buildLinks: buildLinksInput,
     };
     await client.graphQL(
         clientEnvironment,
@@ -17404,7 +17411,7 @@ async function run() {
         if (buildLinksYaml) {
             buildLinks = YAML.parse(buildLinksYaml);
         } else if (buildLinksYamlPackageJson) {
-            buildLinks = packageJsonLinks.readFromPackageJson(buildLinksYamlPackageJson)
+            buildLinks = await packageJsonLinks.readFromPackageJson(buildLinksYamlPackageJson)
         }
 
         // Checking the build links
