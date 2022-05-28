@@ -7,7 +7,7 @@ GitHub Action used to inject build links in Ontrack. It must be used in a workfl
 
 ```yaml
 - id: links
-  uses: nemerosa/ontrack-github-ingestion-build-links@v1
+  uses: nemerosa/ontrack-github-ingestion-build-links
   with:
     build-links: |-
        component: build-name
@@ -23,14 +23,9 @@ The `build-links` must be a YAML map of project x build references:
 By default, all specified links are _authoritative_ meaning that the provided list will cancel and replace any previous existing link. To just append the list of links to any existing one, add the `add-only` input:
 
 ```yaml
-- id: links
-  uses: nemerosa/ontrack-github-ingestion-build-links@v1
   with:
     add-only: true
-    build-links: |-
-       component: build-name
-       library: #build-label
-       other-component: a-build-name
+    # ...
 ```
 
 By default, the build referred to by the action is identified by the same workflow the action runs in. To target another build, other [input arguments](action.yml) can be used. For example, to look for a build by name in the _same project_:
