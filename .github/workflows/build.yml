@@ -49,5 +49,6 @@ jobs:
       - name: ontrack-build-links
         uses: ./
         with:
+          logging: true
           build-links-from-package-json: |-
             - dependency: @nemerosa/ontrack-github-action-client
