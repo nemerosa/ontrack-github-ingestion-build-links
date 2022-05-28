@@ -11,6 +11,9 @@ concurrency: "build-${{ github.ref }}"
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ONTRACK_URL: "${{ secrets.ONTRACK_URL }}"
+      ONTRACK_TOKEN: "${{ secrets.ONTRACK_TOKEN }}"
     steps:
 
       - id: checkout
