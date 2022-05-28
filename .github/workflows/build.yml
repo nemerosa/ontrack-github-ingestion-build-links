@@ -34,7 +34,7 @@ jobs:
 #      - id: npm-test
 #        run: npm run test
 
-      - id: npm-prepare
+      - name: npm-prepare
         run: npm run prepare
 
       - id: npm-compare
