@@ -56,3 +56,4 @@ jobs:
           build-links-from-package-json: |-
             - dependency: "@nemerosa/ontrack-github-action-client"
               build-label: true
+              prefix: "v"

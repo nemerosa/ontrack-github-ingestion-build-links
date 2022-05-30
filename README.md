@@ -87,3 +87,16 @@ with:
       # ...
       build-label: true
 ```
+
+If the version needs a prefix in order to be identified as a build or a build label, it can be specified using the `prefix` property:
+
+```yaml
+with:
+  build-links-from-package-json: |-
+    - dependency: "@nemerosa/ontrack-github-action-client"
+      # ...
+      build-label: true
+      prefix: "v"
+```
+
+In this example, if the version is `0.1.8`, the code will look for a build labelled with `v0.1.8`.

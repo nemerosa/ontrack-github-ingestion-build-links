@@ -39,8 +39,14 @@ const readFromPackageJson = async (configYaml) => {
                     }
                     // Build reference
                     let buildRef = version;
+                    // Prefix
+                    const prefix = link['prefix'];
+                    if (prefix) {
+                        buildRef = `${prefix}${buildRef}`;
+                    }
+                    // Label
                     if (link['build-label'] === true) {
-                        buildRef = `#${version}`;
+                        buildRef = `#${buildRef}`;
                     }
                     // Adding the link
                     links[project] = buildRef;

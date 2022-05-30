@@ -52,6 +52,27 @@ test('build label', async () => {
     });
 });
 
+test('build label and prefix', async () => {
+    const links = await packageJsonLinks.readFromPackageJson(`
+        - dependency: "@nemerosa/ontrack-github-action-client"
+          build-label: true
+          prefix: "v"
+    `)
+    expect(links).toStrictEqual({
+        'ontrack-github-action-client': `#v${clientVersion}`
+    });
+});
+
+test('build name and prefix', async () => {
+    const links = await packageJsonLinks.readFromPackageJson(`
+        - dependency: "@nemerosa/ontrack-github-action-client"
+          prefix: "v"
+    `)
+    expect(links).toStrictEqual({
+        'ontrack-github-action-client': `v${clientVersion}`
+    });
+});
+
 test('two simple dependencies', async () => {
     const links = await packageJsonLinks.readFromPackageJson(`
         - dependency: "@nemerosa/ontrack-github-action-client"
