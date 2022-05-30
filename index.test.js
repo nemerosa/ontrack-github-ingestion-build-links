@@ -1,5 +1,7 @@
 const packageJsonLinks = require('./package-json-links');
 
+const clientVersion = '0.1.8';
+
 test('extraction of project name from JSON dependency', async () => {
     expect(packageJsonLinks.getProjectFromDependency('@actions/core')).toBe('core');
     expect(packageJsonLinks.getProjectFromDependency('color-name')).toBe('color-name');
@@ -26,7 +28,7 @@ test('simple dependency', async () => {
         - dependency: "@nemerosa/ontrack-github-action-client"
     `)
     expect(links).toStrictEqual({
-        'ontrack-github-action-client': '0.1.6'
+        'ontrack-github-action-client': clientVersion
     });
 });
 
@@ -36,7 +38,7 @@ test('project mapping', async () => {
           project: github-action-client
     `)
     expect(links).toStrictEqual({
-        'github-action-client': '0.1.6'
+        'github-action-client': clientVersion
     });
 });
 
@@ -46,7 +48,7 @@ test('build label', async () => {
           build-label: true
     `)
     expect(links).toStrictEqual({
-        'ontrack-github-action-client': '#0.1.6'
+        'ontrack-github-action-client': `#${clientVersion}`
     });
 });
 
@@ -56,7 +58,7 @@ test('two simple dependencies', async () => {
         - dependency: "@actions/core"
     `)
     expect(links).toStrictEqual({
-        'ontrack-github-action-client': '0.1.6',
+        'ontrack-github-action-client': clientVersion,
         'core': '1.8.2'
     });
 });
