@@ -15,3 +15,8 @@ promotions:
     image: nemerosa/ontrack-ingestion-assets/promotions/bronze.png
     validations:
       - build-run
+tagging:
+  strategies:
+    - type: promotion
+      config:
+        name: BRONZE
