@@ -18,3 +18,9 @@ promotions:
 tagging:
   strategies:
     - type: latest
+casc:
+  project:
+    casc:
+      properties:
+        buildLinkDisplayProperty:
+          useLabel: true
