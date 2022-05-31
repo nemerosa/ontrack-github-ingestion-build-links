@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/nemerosa/ontrack-github-ingestion-build-links/compare/v1.0.3...v1.1.0) (2022-05-31)
+
+
+### Features
+
+* by build name & by build label ([30224d9](https://github.com/nemerosa/ontrack-github-ingestion-build-links/commit/30224d9c62a5c4629a332a27a00d4140d8c59ea0))
+
 ## [1.0.3](https://github.com/nemerosa/ontrack-github-ingestion-build-links/compare/v1.0.2...v1.0.3) (2022-05-31)
 
 ## [1.0.2](https://github.com/nemerosa/ontrack-github-ingestion-build-links/compare/v1.0.1...v1.0.2) (2022-05-31)
