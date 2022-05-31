@@ -17,6 +17,4 @@ promotions:
       - build-run
 tagging:
   strategies:
-    - type: promotion
-      config:
-        name: BRONZE
+    - type: latest
