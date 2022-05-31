@@ -53,6 +53,94 @@ const buildLinksByRunId = async (clientEnvironment, logging, owner, repository, 
     );
 };
 
+const buildLinksByBuildName = async (clientEnvironment, logging, owner, repository, buildName, addOnly, buildLinks) => {
+    const query = `
+        mutation BuildLinksByBuildName(
+            $owner: String!,
+            $repository: String!,
+            $buildName: String!,
+            $addOnly: Boolean!,
+            $buildLinks: [GitHubIngestionLink!]!,
+        ) {
+            gitHubIngestionBuildLinksByBuildName(input: {
+                owner: $owner,
+                repository: $repository,
+                buildName: $buildName,
+                addOnly: $addOnly,
+                buildLinks: $buildLinks,
+            }) {
+                errors {
+                    message
+                }
+            }
+        }
+    `;
+    const buildLinksInput = [];
+    for (const project in buildLinks) {
+        buildLinksInput.push({
+            project: project,
+            buildRef: buildLinks[project]
+        });
+    }
+    const variables = {
+        owner: owner,
+        repository: repository,
+        buildName: buildName,
+        addOnly: addOnly,
+        buildLinks: buildLinksInput,
+    };
+    await client.graphQL(
+        clientEnvironment,
+        query,
+        variables,
+        logging
+    );
+};
+
+const buildLinksByBuildLabel = async (clientEnvironment, logging, owner, repository, buildLabel, addOnly, buildLinks) => {
+    const query = `
+        mutation BuildLinksByBuildLabel(
+            $owner: String!,
+            $repository: String!,
+            $buildLabel: String!,
+            $addOnly: Boolean!,
+            $buildLinks: [GitHubIngestionLink!]!,
+        ) {
+            gitHubIngestionBuildLinksByBuildLabel(input: {
+                owner: $owner,
+                repository: $repository,
+                buildLabel: $buildLabel,
+                addOnly: $addOnly,
+                buildLinks: $buildLinks,
+            }) {
+                errors {
+                    message
+                }
+            }
+        }
+    `;
+    const buildLinksInput = [];
+    for (const project in buildLinks) {
+        buildLinksInput.push({
+            project: project,
+            buildRef: buildLinks[project]
+        });
+    }
+    const variables = {
+        owner: owner,
+        repository: repository,
+        buildLabel: buildLabel,
+        addOnly: addOnly,
+        buildLinks: buildLinksInput,
+    };
+    await client.graphQL(
+        clientEnvironment,
+        query,
+        variables,
+        logging
+    );
+};
+
 async function run() {
     try {
         const logging = core.getBooleanInput('logging');
@@ -111,15 +199,15 @@ async function run() {
             }
             // By build label
             if (buildLabel) {
-                throw 'Build by label not implemented yet.';
+                await buildLinksByBuildLabel(clientEnvironment, logging, owner, repository, buildLabel, addOnly, buildLinks);
             }
             // By build name
             else if (buildName) {
-                throw 'Build by name not implemented yet.';
+                await buildLinksByBuildName(clientEnvironment, logging, owner, repository, buildName, addOnly, buildLinks);
             }
             // By run ID
             else {
-                await buildLinksByRunId(clientEnvironment, logging, owner, repository, github.context.runId, addOnly, buildLinks)
+                await buildLinksByRunId(clientEnvironment, logging, owner, repository, github.context.runId, addOnly, buildLinks);
             }
         }
 
